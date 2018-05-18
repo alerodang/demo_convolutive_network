@@ -149,7 +149,7 @@ with tf.Session() as sess:
     print("Model saved in file: %s" % save_path)
 
     failCounter = 0
-    for i in range(3):
+    for i in range(10):
         output = sess.run(example_batch_valid_predicted)
         label = sess.run(label_batch_test)
         for o, l in zip(output, label):
