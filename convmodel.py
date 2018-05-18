@@ -128,11 +128,11 @@ with tf.Session() as sess:
     training_error_values = []
     validation_error_error_values = []
     validation_error=100
-    _ = 0
+    i = 0
     while True:
         sess.run(optimizer)
-        if _ % 20 == 0:
-            print("Iter:", _, "---------------------------------------------")
+        if i % 20 == 0:
+            print("Iter:", i, "---------------------------------------------")
             print(sess.run(label_batch_valid))
             print(sess.run(example_batch_valid_predicted))
             validation_error = sess.run(cost_valid)
@@ -143,26 +143,23 @@ with tf.Session() as sess:
             training_error_values.append(training_error)
         if validation_error < 0.001:
             break
-        _ = _ + 1
+        i = i + 1
 
     save_path = saver.save(sess, "./tmp/model15.ckpt")
     print("Model saved in file: %s" % save_path)
 
     failCounter = 0
-    for _ in range(10):
+    for i in range(3):
         output = sess.run(example_batch_valid_predicted)
         label = sess.run(label_batch_test)
         for o, l in zip(output, label):
             if round(o[0]) != l[0] or round(o[1]) != l[1] or round(o[2]) != l[2]:
                 failCounter += 1
 
-
-
     failPercentage = 100*failCounter/15
     print("Fail percentage: " + str(failPercentage))
     # print("length: " + str(len(label)))
     # print("output: " + str(len(output)))
-
 
     coord.request_stop()
     coord.join(threads)
